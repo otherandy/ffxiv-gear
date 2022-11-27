@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 
-export async function getServerSideProps() {
+export const getServerSideProps = async () => {
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_SERVER_URL}/api/characters/`
   );
@@ -11,7 +11,7 @@ export async function getServerSideProps() {
   return {
     props: { data },
   };
-}
+};
 
 export default function Index({ data }: any) {
   const [characters, setCharacters] = useState(data);
@@ -37,8 +37,8 @@ export default function Index({ data }: any) {
   return (
     <main>
       {characters.map((character: any) => (
-        <div key={character._id}>
-          <Link href={`/character/${character._id}`}>Edit</Link>
+        <div key={character.id}>
+          <Link href={`/character/${character.id}`}>Edit</Link>
           <input name="name" defaultValue={character.name} />
         </div>
       ))}

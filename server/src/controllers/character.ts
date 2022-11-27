@@ -25,6 +25,7 @@ const createCharacter = async (req: Request, res: Response) => {
 
 const updateCharacter = async (req: Request, res: Response) => {
   const { id } = req.params;
+  delete req.body.id;
   const character = await prisma.character.update({
     where: { id: id },
     data: req.body,
@@ -33,6 +34,9 @@ const updateCharacter = async (req: Request, res: Response) => {
 };
 
 const updateCharacters = async (req: Request, res: Response) => {
+  for (const character of req.body) {
+    delete character.id;
+  }
   const characters = await prisma.character.updateMany({
     data: req.body,
   });
