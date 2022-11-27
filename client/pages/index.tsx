@@ -1,14 +1,19 @@
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { Character } from '../interfaces';
+import axios from 'axios';
+import io from 'socket.io-client';
+
 import Link from 'next/link';
+
+const socket = io(process.env.NEXT_PUBLIC_API_URL!);
 
 export const getServerSideProps: GetServerSideProps<{
   data: Character[];
 }> = async () => {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/characters/`);
+  const res = await axios(`${process.env.NEXT_PUBLIC_API_URL}/api/characters/`);
 
-  const data: Character[] = await res.json();
+  const data: Character[] = await res.data;
 
   return {
     props: { data },
@@ -19,6 +24,13 @@ const Home = ({
   data,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const [characters, setCharacters] = useState<Character[]>(data);
+
+  useEffect(() => {
+    socket.on('update', (data: string) => {
+      const updatedCharacters = JSON.parse(data);
+      setCharacters(updatedCharacters);
+    });
+  }, []);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -31,22 +43,19 @@ const Home = ({
     setCharacters(updatedCharacters);
   };
 
-  const createCharacter = () => {
-    fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/characters/`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        name: 'New Character',
-        job: 'PLD',
-        gearset: 'https://etro.gg/',
-      }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        setCharacters([...characters, data]);
-      });
+  const createCharacter = async () => {
+    const res = await axios.post(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/characters/`,
+      {
+        data: {
+          name: 'New Character',
+          job: 'PLD',
+          gearset: 'https://etro.gg/',
+        },
+      }
+    );
+    const data = await res.data;
+    setCharacters([...characters, data]);
   };
 
   return (

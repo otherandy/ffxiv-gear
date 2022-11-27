@@ -1,21 +1,23 @@
 import { ChangeEvent, useEffect, useState } from 'react';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { Character } from '../../interfaces';
+import axios from 'axios';
 import io from 'socket.io-client';
+
 // import Script from 'next/script';
 
-const socket = io('http://localhost:4000');
+const socket = io(process.env.NEXT_PUBLIC_API_URL!);
 
 export const getServerSideProps: GetServerSideProps<{
   data: Character;
 }> = async (context) => {
   const { id } = context.query;
 
-  const res = await fetch(
+  const res = await axios(
     `${process.env.NEXT_PUBLIC_API_URL}/api/characters/${id}`
   );
 
-  const data: Character = await res.json();
+  const data: Character = await res.data;
 
   return {
     props: { data },

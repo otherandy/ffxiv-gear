@@ -15,12 +15,10 @@ const io = new Server(server, {
   },
 });
 
-io.on('connection', (socket: Socket) => {
-  socket.on('change', (data) => {
-    socket.broadcast.emit('update', data);
-  });
-});
+io.on('connection', (socket: Socket) => {});
 
-server.listen(port, () =>
-  console.log(`Server is listening on http://localhost:${port}`)
-);
+server.listen(port, () => {
+  if (process.env.NODE_ENV !== 'production') {
+    console.log(`Server is listening on http://localhost:${port}`);
+  }
+});
