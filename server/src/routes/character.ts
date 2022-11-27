@@ -8,7 +8,7 @@ import {
   updateCharacter,
   updateCharacters,
   deleteCharacter,
-} from '../controllers/character.controllers';
+} from '../controllers/character';
 
 router.get('/', getCharacters);
 router.get('/:id', getCharacter);

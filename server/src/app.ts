@@ -1,8 +1,10 @@
 import express from 'express';
 import cors from 'cors';
-import './db';
+import { PrismaClient } from '@prisma/client';
 
-import characterRouter from './routes/character.routes';
+const prisma = new PrismaClient();
+
+import characterRoutes from './routes/character';
 
 const app = express();
 
@@ -11,6 +13,6 @@ app.use(cors());
 app.use(express.json());
 
 // routes
-app.use('/api/characters', characterRouter);
+app.use('/api/characters', characterRoutes);
 
 export default app;
