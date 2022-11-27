@@ -1,20 +1,35 @@
-import { useState } from 'react';
+import { ChangeEvent, useState } from 'react';
+import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
+import { Character } from '../interfaces';
 import Link from 'next/link';
 
-export const getServerSideProps = async () => {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_SERVER_URL}/api/characters/`
-  );
+export const getServerSideProps: GetServerSideProps<{
+  data: Character[];
+}> = async () => {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/characters/`);
 
-  const data = await res.json();
+  const data: Character[] = await res.json();
 
   return {
     props: { data },
   };
 };
 
-export default function Index({ data }: any) {
-  const [characters, setCharacters] = useState(data);
+const Home = ({
+  data,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+  const [characters, setCharacters] = useState<Character[]>(data);
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    const updatedCharacters = characters.map((character: Character) => {
+      // if (character.id === name) {
+      //   return { ...character, [name]: value };
+      // }
+      return character;
+    });
+    setCharacters(updatedCharacters);
+  };
 
   const createCharacter = () => {
     fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/characters/`, {
@@ -45,4 +60,6 @@ export default function Index({ data }: any) {
       <button onClick={createCharacter}>Create</button>
     </main>
   );
-}
+};
+
+export default Home;

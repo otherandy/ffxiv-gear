@@ -16,7 +16,7 @@ const io = new Server(server, {
 });
 
 io.on('connection', (socket: Socket) => {
-  socket.on('update', (data) => {
+  socket.on('change', (data) => {
     socket.broadcast.emit('update', data);
   });
 });

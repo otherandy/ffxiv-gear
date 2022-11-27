@@ -1,23 +1,45 @@
-import { BaseSyntheticEvent, useEffect, useState } from 'react';
-import { GetServerSideProps } from 'next';
+import { ChangeEvent, useEffect, useState } from 'react';
+import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
+import { Character } from '../../interfaces';
+import io from 'socket.io-client';
 // import Script from 'next/script';
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+const socket = io('http://localhost:4000');
+
+export const getServerSideProps: GetServerSideProps<{
+  data: Character;
+}> = async (context) => {
   const { id } = context.query;
 
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_SERVER_URL}/api/characters/${id}`
+    `${process.env.NEXT_PUBLIC_API_URL}/api/characters/${id}`
   );
 
-  const data = await res.json();
+  const data: Character = await res.json();
 
   return {
     props: { data },
   };
 };
 
-export default function Character({ data }: any) {
+const Character = ({
+  data,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const [character, setCharacter] = useState(data);
+
+  useEffect(() => {
+    socket.on('update', (data: string) => {
+      const updatedCharacter = JSON.parse(data);
+      setCharacter(updatedCharacter);
+    });
+  }, []);
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    const updatedCharacter = { ...character, [name]: value };
+    const updatedCharacterString = JSON.stringify(updatedCharacter);
+    socket.emit('change', updatedCharacterString);
+  };
 
   return (
     <main>
@@ -28,11 +50,17 @@ export default function Character({ data }: any) {
       >
         Augmented Cryptlurker's Pendulums
       </a> */}
-      <h1>{character.name}</h1>
+      <input
+        name="name"
+        defaultValue={character.name}
+        onChange={handleChange}
+      />
       <h2>{character.job}</h2>
       <a href={character.gearset} target="_blank">
         Gearset
       </a>
     </main>
   );
-}
+};
+
+export default Character;
