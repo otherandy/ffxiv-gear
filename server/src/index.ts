@@ -1,8 +1,10 @@
-require('dotenv').config();
-const app = require('./app');
-const http = require('http');
+import dotenv from 'dotenv';
+dotenv.config();
+import app from './app';
+import http from 'http';
+import { Server, Socket } from 'socket.io';
+
 const server = http.createServer(app);
-const { Server } = require('socket.io');
 
 const io = new Server(server, {
   cors: {
@@ -11,7 +13,7 @@ const io = new Server(server, {
   },
 });
 
-io.on('connection', (socket) => {
+io.on('connection', (socket: Socket) => {
   socket.on('update', (data) => {
     socket.broadcast.emit('update', data);
   });

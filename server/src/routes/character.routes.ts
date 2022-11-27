@@ -1,14 +1,14 @@
-const { Router } = require('express');
+import { Router } from 'express';
 const router = Router();
 
-const {
+import {
   getCharacters,
   getCharacter,
   createCharacter,
   updateCharacter,
   updateCharacters,
   deleteCharacter,
-} = require('../controllers/character.controllers');
+} from '../controllers/character.controllers';
 
 router.get('/', getCharacters);
 router.get('/:id', getCharacter);
@@ -17,4 +17,4 @@ router.put('/:id', updateCharacter);
 router.put('/', updateCharacters);
 router.delete('/:id', deleteCharacter);
 
-module.exports = router;
+export default router;
