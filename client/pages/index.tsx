@@ -1,69 +1,40 @@
-import { ChangeEvent, useEffect, useState } from 'react';
-import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
+import { ChangeEvent, FC } from 'react';
 import { Character } from '../interfaces';
 import axios from 'axios';
-import io from 'socket.io-client';
 
 import Link from 'next/link';
 
-const socket = io(process.env.NEXT_PUBLIC_API_URL!);
-
-export const getServerSideProps: GetServerSideProps<{
-  data: Character[];
-}> = async () => {
-  const res = await axios(`${process.env.NEXT_PUBLIC_API_URL}/api/characters/`);
-
-  const data: Character[] = await res.data;
-
-  return {
-    props: { data },
-  };
+type Props = {
+  characters: Character[];
 };
 
-const Home = ({
-  data,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-  const [characters, setCharacters] = useState<Character[]>(data);
-
-  useEffect(() => {
-    socket.on('update', (data: string) => {
-      const updatedCharacters = JSON.parse(data);
-      setCharacters(updatedCharacters);
-    });
-  }, []);
-
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+const Home: FC<Props> = ({ characters }) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>, index: number) => {
     const { name, value } = e.target;
-    const updatedCharacters = characters.map((character: Character) => {
-      // if (character.id === name) {
-      //   return { ...character, [name]: value };
-      // }
-      return character;
+    const id = characters[index].id;
+    axios.put(`${process.env.NEXT_PUBLIC_API_URL}/api/characters/${id}`, {
+      [name]: value,
     });
-    setCharacters(updatedCharacters);
   };
 
-  const createCharacter = async () => {
-    const res = await axios.post(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/characters/`,
-      {
-        data: {
-          name: 'New Character',
-          job: 'PLD',
-          gearset: 'https://etro.gg/',
-        },
-      }
-    );
-    const data = await res.data;
-    setCharacters([...characters, data]);
+  const createCharacter = () => {
+    axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/characters/`, {
+      name: 'New Character',
+      job: 'PLD',
+      gearset: 'https://etro.gg/',
+    });
   };
 
   return (
     <main>
-      {characters.map((character: any) => (
+      {characters?.map((character, index) => (
         <div key={character.id}>
           <Link href={`/character/${character.id}`}>Edit</Link>
-          <input name="name" defaultValue={character.name} />
+          <input
+            name="name"
+            defaultValue={character.name}
+            onChange={(e) => handleChange(e, index)}
+          />
         </div>
       ))}
       <button onClick={createCharacter}>Create</button>

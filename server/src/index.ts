@@ -22,7 +22,9 @@ const db = mongoose.connection;
 db.once('open', () => {
   console.log('Database connection established successfully');
 
-  const characterStream = db.collection('characters').watch();
+  const characterStream = db
+    .collection('Character')
+    .watch([], { fullDocument: 'updateLookup' });
 
   characterStream.on('change', (change) => {
     switch (change.operationType) {
@@ -30,6 +32,9 @@ db.once('open', () => {
         io.emit('insert', change.fullDocument);
         break;
       case 'update':
+        const updatedCharacter = change.fullDocument!;
+        updatedCharacter.id = updatedCharacter._id;
+        delete updatedCharacter._id;
         io.emit('update', change.fullDocument);
         break;
       case 'delete':

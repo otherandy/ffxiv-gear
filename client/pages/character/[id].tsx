@@ -1,46 +1,25 @@
-import { ChangeEvent, useEffect, useState } from 'react';
-import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
+import { useRouter } from 'next/router';
+import { FC } from 'react';
+import { ChangeEvent } from 'react';
 import { Character } from '../../interfaces';
 import axios from 'axios';
-import io from 'socket.io-client';
 
 // import Script from 'next/script';
 
-const socket = io(process.env.NEXT_PUBLIC_API_URL!);
-
-export const getServerSideProps: GetServerSideProps<{
-  data: Character;
-}> = async (context) => {
-  const { id } = context.query;
-
-  const res = await axios(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/characters/${id}`
-  );
-
-  const data: Character = await res.data;
-
-  return {
-    props: { data },
-  };
+type Props = {
+  characters: Character[];
 };
 
-const Character = ({
-  data,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-  const [character, setCharacter] = useState(data);
-
-  useEffect(() => {
-    socket.on('update', (data: string) => {
-      const updatedCharacter = JSON.parse(data);
-      setCharacter(updatedCharacter);
-    });
-  }, []);
+const Character: FC<Props> = ({ characters }) => {
+  const router = useRouter();
+  const { id } = router.query;
+  const index = characters.findIndex((c) => c.id === id);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    const updatedCharacter = { ...character, [name]: value };
-    const updatedCharacterString = JSON.stringify(updatedCharacter);
-    socket.emit('change', updatedCharacterString);
+    axios.put(`${process.env.NEXT_PUBLIC_API_URL}/api/characters/${id}`, {
+      [name]: value,
+    });
   };
 
   return (
@@ -54,11 +33,11 @@ const Character = ({
       </a> */}
       <input
         name="name"
-        defaultValue={character.name}
+        defaultValue={characters[index].name}
         onChange={handleChange}
       />
-      <h2>{character.job}</h2>
-      <a href={character.gearset} target="_blank">
+      <h2>{characters[index].job}</h2>
+      <a href={characters[index].gearset} target="_blank">
         Gearset
       </a>
     </main>
