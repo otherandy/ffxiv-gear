@@ -1,9 +1,13 @@
-import '../styles/globals.css';
 import App, { AppContext, AppProps } from 'next/app';
 import { useEffect, useState } from 'react';
 import { Character } from '../interfaces';
+import { ChakraProvider } from '@chakra-ui/react';
+import theme from '../styles/theme';
+
 import io from 'socket.io-client';
 import axios from 'axios';
+
+import MyHeader from '../components/header';
 
 type MyProps = {
   data: Character[];
@@ -39,11 +43,14 @@ const MyApp = ({ Component, pageProps, data }: AppProps & MyProps) => {
   }, []);
 
   return (
-    <Component
-      {...pageProps}
-      characters={characters}
-      setCharacters={setCharacters}
-    />
+    <ChakraProvider theme={theme}>
+      <MyHeader />
+      <Component
+        {...pageProps}
+        characters={characters}
+        setCharacters={setCharacters}
+      />
+    </ChakraProvider>
   );
 };
 
