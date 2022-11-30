@@ -1,12 +1,12 @@
-import { ChangeEvent, useEffect, useState } from 'react';
+import Link from 'next/link';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { Character } from '../interfaces';
 import { getColorScheme } from '../utils/character';
 import { getColor } from '../utils/needs';
 import axios from 'axios';
 import io from 'socket.io-client';
 
-import Link from 'next/link';
 import {
   HStack,
   Select,

@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
-import { ChangeEvent, useState } from 'react';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
+import { ChangeEvent, useState } from 'react';
 import { Character } from '../../interfaces';
 import axios from 'axios';
 
@@ -15,6 +15,7 @@ import {
   FormHelperText,
   FormLabel,
   Heading,
+  HStack,
   Input,
   Modal,
   ModalBody,
@@ -27,7 +28,8 @@ import {
   useDisclosure,
   useToast,
 } from '@chakra-ui/react';
-import { DeleteIcon } from '@chakra-ui/icons';
+import { DeleteIcon, RepeatIcon } from '@chakra-ui/icons';
+import { getColorScheme } from '../../utils/character';
 
 export const getServerSideProps: GetServerSideProps<{
   data: Character;
@@ -52,8 +54,8 @@ export default function Edit({
   const [character, setCharacter] = useState<Character>(data);
 
   const toast = useToast();
-  const { isOpen, onOpen, onClose } = useDisclosure();
   const [isLoading, setIsLoading] = useState(false);
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
@@ -117,9 +119,19 @@ export default function Edit({
       });
   };
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
     setCharacter({ ...character, [name]: value });
+  };
+
+  const handleUpdate = async () => {
+    toast({
+      title: 'Not implemented yet.',
+      status: 'info',
+      isClosable: true,
+    });
   };
 
   return (
@@ -142,7 +154,12 @@ export default function Edit({
             </FormControl>
             <FormControl>
               <FormLabel>Role</FormLabel>
-              <Select name="role" defaultValue={character.role}>
+              <Select
+                name="role"
+                defaultValue={character.role}
+                borderColor={getColorScheme(character)}
+                onChange={handleChange}
+              >
                 <option value="Tank">Tank</option>
                 <option value="Healer">Healer</option>
                 <option value="DPS">DPS</option>
@@ -150,7 +167,12 @@ export default function Edit({
             </FormControl>
             <FormControl>
               <FormLabel>Gearset</FormLabel>
-              <Input name="gearset" defaultValue={character.gearset} />
+              <HStack>
+                <Input name="gearset" defaultValue={character.gearset} />
+                <Button onClick={handleUpdate}>
+                  <RepeatIcon boxSize={6} />
+                </Button>
+              </HStack>
               <FormHelperText>Please use an etro link.</FormHelperText>
             </FormControl>
             <Button
