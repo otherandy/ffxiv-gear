@@ -12,7 +12,29 @@ datasource db {
 
 model Character {
   id      String  @id @default(auto()) @map("_id") @db.ObjectId
-  name    String
-  job     String?
-  gearset String  @default("http://etro.gg/")
+  name    String  @default("New Character")
+  job     String? @default("SGE")
+  gearset String  @default("https://etro.gg/")
+
+  weapon   String @default("Don't need")
+  hat      String @default("Don't need")
+  chest    String @default("Don't need")
+  gloves   String @default("Don't need")
+  legs     String @default("Don't need")
+  boots    String @default("Don't need")
+  earrings String @default("Don't need")
+  necklace String @default("Don't need")
+  bracelet String @default("Don't need")
+  rings    String @default("Don't need")
+
+  tomeWeapon String @default("Don't need")
+
+  accessoryUpgrade String @default("Don't need")
+  armorUpgrade     String @default("Don't need")
+  weaponUpgrade    String @default("Don't need")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("characters")
 }

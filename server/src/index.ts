@@ -23,7 +23,7 @@ db.once('open', () => {
   console.log('Database connection established successfully');
 
   const characterStream = db
-    .collection('Character')
+    .collection('characters')
     .watch([], { fullDocument: 'updateLookup' });
 
   characterStream.on('change', (change) => {
