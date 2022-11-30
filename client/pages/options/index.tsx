@@ -1,4 +1,6 @@
+import { useState } from 'react';
 import axios from 'axios';
+
 import {
   Button,
   Card,
@@ -9,27 +11,31 @@ import {
   useToast,
 } from '@chakra-ui/react';
 
-const createCharacter = (toast: any) => {
-  axios
-    .post(`${process.env.NEXT_PUBLIC_API_URL}/api/characters/`)
-    .then(() => {
-      toast({
-        title: 'Character created.',
-        status: 'success',
-        isClosable: true,
-      });
-    })
-    .catch(() => {
-      toast({
-        title: 'Error creating character.',
-        status: 'error',
-        isClosable: true,
-      });
-    });
-};
-
-const Options = () => {
+export default function Options() {
   const toast = useToast();
+  const [isLoading, setIsLoading] = useState(false);
+
+  const createCharacter = (toast: any) => {
+    setIsLoading(true);
+    axios
+      .post(`${process.env.NEXT_PUBLIC_API_URL}/api/characters`)
+      .then(() => {
+        toast({
+          title: 'Character created.',
+          status: 'success',
+          isClosable: true,
+        });
+      })
+      .catch(() => {
+        toast({
+          title: 'Error creating character.',
+          status: 'error',
+          isClosable: true,
+        });
+      });
+    setIsLoading(false);
+  };
+
   return (
     <Container>
       <Card>
@@ -42,6 +48,7 @@ const Options = () => {
             onClick={(_) => {
               createCharacter(toast);
             }}
+            isLoading={isLoading}
           >
             Create New Character
           </Button>
@@ -49,6 +56,4 @@ const Options = () => {
       </Card>
     </Container>
   );
-};
-
-export default Options;
+}

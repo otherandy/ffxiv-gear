@@ -1,13 +1,14 @@
-import { ChangeEvent, FC } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
+import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { Character } from '../interfaces';
 import { getColorScheme } from '../utils/character';
 import { getColor } from '../utils/needs';
 import axios from 'axios';
+import io from 'socket.io-client';
 
 import Link from 'next/link';
 import {
   HStack,
-  Input,
   Select,
   Table,
   TableContainer,
@@ -20,22 +21,58 @@ import {
 } from '@chakra-ui/react';
 import { EditIcon, ExternalLinkIcon } from '@chakra-ui/icons';
 
-type Props = {
-  characters: Character[];
+const socket = io(process.env.NEXT_PUBLIC_API_URL!);
+
+export const getServerSideProps: GetServerSideProps<{
+  data: Character[];
+}> = async () => {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/characters`);
+  const data = await res.json();
+
+  return {
+    props: {
+      data,
+    },
+  };
 };
 
-const Home: FC<Props> = ({ characters }) => {
-  const handleChange = (
-    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>,
-    index: number
-  ) => {
+export default function Home({
+  data,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const [characters, setCharacters] = useState<Character[]>(data);
+
+  useEffect(() => {
+    socket.on('insert', (character: Character) => {
+      setCharacters((characters) => [...characters, character]);
+    });
+
+    socket.on('update', (character: Character) => {
+      setCharacters((characters) => {
+        const index = characters.findIndex((c) => c.id === character.id);
+        characters[index] = character;
+        return [...characters];
+      });
+    });
+
+    socket.on('delete', (id: string) => {
+      setCharacters((characters) => characters.filter((c) => c.id !== id));
+    });
+
+    return () => {
+      socket.off('insert');
+      socket.off('update');
+      socket.off('delete');
+    };
+  }, []);
+
+  const handleChange = (e: ChangeEvent<HTMLSelectElement>, index: number) => {
     const { name, value } = e.target;
     const id = characters[index].id;
     axios
       .put(`${process.env.NEXT_PUBLIC_API_URL}/api/characters/${id}`, {
         [name]: value,
       })
-      .catch(() => {});
+      .catch((err) => console.error(err));
   };
 
   return (
@@ -75,14 +112,8 @@ const Home: FC<Props> = ({ characters }) => {
           {characters.map((character, index) => (
             <Tr key={character.id}>
               <Td>
-                <Input
-                  name="name"
-                  variant="unstyled"
-                  value={character.name}
-                  onChange={(e) => handleChange(e, index)}
-                />
                 <Tag colorScheme={getColorScheme(character)}>
-                  {character.job}
+                  {character.name}
                 </Tag>
               </Td>
               <Td colSpan={4}>
@@ -313,6 +344,4 @@ const Home: FC<Props> = ({ characters }) => {
       </Table>
     </TableContainer>
   );
-};
-
-export default Home;
+}

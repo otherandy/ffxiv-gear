@@ -1,7 +1,7 @@
 export interface Character {
   id: string;
   name: string;
-  job: string;
+  role: string;
   gearset: string;
   weapon: string;
   hat: string;
