@@ -6,17 +6,30 @@ import {
   CardHeader,
   Container,
   Heading,
+  useToast,
 } from '@chakra-ui/react';
 
-const createCharacter = () => {
-  axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/characters/`, {
-    name: 'New Character',
-    job: 'PLD',
-    gearset: 'https://etro.gg/',
-  });
+const createCharacter = (toast: any) => {
+  axios
+    .post(`${process.env.NEXT_PUBLIC_API_URL}/api/characters/`)
+    .then(() => {
+      toast({
+        title: 'Character created.',
+        status: 'success',
+        isClosable: true,
+      });
+    })
+    .catch(() => {
+      toast({
+        title: 'Error creating character.',
+        status: 'error',
+        isClosable: true,
+      });
+    });
 };
 
 const Options = () => {
+  const toast = useToast();
   return (
     <Container>
       <Card>
@@ -24,7 +37,12 @@ const Options = () => {
           <Heading>Options</Heading>
         </CardHeader>
         <CardBody>
-          <Button colorScheme="blue" onClick={createCharacter}>
+          <Button
+            colorScheme="blue"
+            onClick={(_) => {
+              createCharacter(toast);
+            }}
+          >
             Create New Character
           </Button>
         </CardBody>

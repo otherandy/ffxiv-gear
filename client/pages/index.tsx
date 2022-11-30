@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { ChangeEvent, FC } from 'react';
 import { Character } from '../interfaces';
 import axios from 'axios';
 
@@ -9,20 +9,24 @@ import {
   Select,
   Table,
   TableContainer,
+  Tag,
   Tbody,
   Td,
   Th,
   Thead,
   Tr,
 } from '@chakra-ui/react';
-import { DeleteIcon, EditIcon } from '@chakra-ui/icons';
+import { EditIcon, ExternalLinkIcon } from '@chakra-ui/icons';
 
 type Props = {
   characters: Character[];
 };
 
 const Home: FC<Props> = ({ characters }) => {
-  const handleChange = (e: any, index: number) => {
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+    index: number
+  ) => {
     const { name, value } = e.target;
     const id = characters[index].id;
     axios
@@ -36,104 +40,217 @@ const Home: FC<Props> = ({ characters }) => {
     <TableContainer>
       <Table>
         <Thead>
-          <Th>Name</Th>
-          <Th>Turn 1</Th>
-          <Th>Turn 2</Th>
-          <Th>Turn 3</Th>
-          <Th>Turn 4</Th>
-          <Th>Edit</Th>
+          <Tr>
+            <Th></Th>
+            <Th colSpan={4}>Turn 1</Th>
+            <Th colSpan={5}>Turn 2</Th>
+            <Th colSpan={5}>Turn 3</Th>
+            <Th colSpan={2}>Turn 4</Th>
+            <Th>Edit</Th>
+          </Tr>
         </Thead>
         <Tbody>
+          <Tr>
+            <Td>Name</Td>
+            <Td>Bracelet</Td>
+            <Td>Earrings</Td>
+            <Td>Necklace</Td>
+            <Td>Rings</Td>
+            <Td>Boots</Td>
+            <Td>Gloves</Td>
+            <Td>Hat</Td>
+            <Td>Acc. Up.</Td>
+            <Td>Tome Weap.</Td>
+            <Td>Boots</Td>
+            <Td>Legs</Td>
+            <Td>Hat</Td>
+            <Td>Armor Up.</Td>
+            <Td>Weapon Up.</Td>
+            <Td>Chest</Td>
+            <Td>Weapon</Td>
+            <Td></Td>
+          </Tr>
           {characters.map((character, index) => (
-            <Tr>
+            <Tr key={character.id}>
               <Td>
                 <Input
                   name="name"
+                  variant="unstyled"
                   defaultValue={character.name}
-                  onChange={(e) => handleChange(e.nativeEvent, index)}
-                  width="auto"
+                  onChange={(e) => handleChange(e, index)}
                 />
+                <Tag colorScheme="green">{character.job}</Tag>
               </Td>
-              <Td>
+              <Td colSpan={4}>
                 <HStack>
-                  <Select size="xs">
+                  <Select
+                    name="bracelet"
+                    variant="unstyled"
+                    defaultValue={character.bracelet}
+                    onChange={(e) => handleChange(e, index)}
+                  >
                     <option value="Don't need">Don't need</option>
                     <option value="Need">Need</option>
                     <option value="Have">Have</option>
                   </Select>
-                  <Select size="xs">
+                  <Select
+                    name="earrings"
+                    variant="unstyled"
+                    defaultValue={character.earrings}
+                    onChange={(e) => handleChange(e, index)}
+                  >
                     <option value="Don't need">Don't need</option>
                     <option value="Need">Need</option>
                     <option value="Have">Have</option>
                   </Select>
-                  <Select size="xs">
+                  <Select
+                    name="necklace"
+                    variant="unstyled"
+                    defaultValue={character.necklace}
+                    onChange={(e) => handleChange(e, index)}
+                  >
                     <option value="Don't need">Don't need</option>
                     <option value="Need">Need</option>
                     <option value="Have">Have</option>
                   </Select>
-                  <Select size="xs">
+                  <Select
+                    name="rings"
+                    variant="unstyled"
+                    defaultValue={character.rings}
+                    onChange={(e) => handleChange(e, index)}
+                  >
                     <option value="Don't need">Don't need</option>
                     <option value="Need">Need</option>
                     <option value="Have">Have</option>
                   </Select>
                 </HStack>
               </Td>
-              <Td>
+              <Td colSpan={5}>
                 <HStack>
-                  <Select size="xs">
+                  <Select
+                    name="boots"
+                    variant="unstyled"
+                    defaultValue={character.boots}
+                    onChange={(e) => handleChange(e, index)}
+                  >
                     <option value="Don't need">Don't need</option>
                     <option value="Need">Need</option>
                     <option value="Have">Have</option>
                   </Select>
-                  <Select size="xs">
+                  <Select
+                    name="gloves"
+                    variant="unstyled"
+                    defaultValue={character.gloves}
+                    onChange={(e) => handleChange(e, index)}
+                  >
                     <option value="Don't need">Don't need</option>
                     <option value="Need">Need</option>
                     <option value="Have">Have</option>
                   </Select>
-                  <Select size="xs">
+                  <Select
+                    name="hat"
+                    variant="unstyled"
+                    defaultValue={character.hat}
+                    onChange={(e) => handleChange(e, index)}
+                  >
                     <option value="Don't need">Don't need</option>
                     <option value="Need">Need</option>
                     <option value="Have">Have</option>
                   </Select>
-                  <Select size="xs">
+                  <Select
+                    name="accessoryUpgrade"
+                    variant="unstyled"
+                    defaultValue={character.accessoryUpgrade}
+                    onChange={(e) => handleChange(e, index)}
+                  >
+                    <option value="Don't need">Don't need</option>
+                    <option value="Need">Need</option>
+                    <option value="Have">Have</option>
+                  </Select>
+                  <Select
+                    name="tomeWeapon"
+                    variant="unstyled"
+                    defaultValue={character.tomeWeapon}
+                    onChange={(e) => handleChange(e, index)}
+                  >
                     <option value="Don't need">Don't need</option>
                     <option value="Need">Need</option>
                     <option value="Have">Have</option>
                   </Select>
                 </HStack>
               </Td>
-              <Td>
+              <Td colSpan={5}>
                 <HStack>
-                  <Select size="xs">
+                  <Select
+                    name="boots"
+                    variant="unstyled"
+                    defaultValue={character.boots}
+                    onChange={(e) => handleChange(e, index)}
+                  >
                     <option value="Don't need">Don't need</option>
                     <option value="Need">Need</option>
                     <option value="Have">Have</option>
                   </Select>
-                  <Select size="xs">
+                  <Select
+                    name="legs"
+                    variant="unstyled"
+                    defaultValue={character.legs}
+                    onChange={(e) => handleChange(e, index)}
+                  >
                     <option value="Don't need">Don't need</option>
                     <option value="Need">Need</option>
                     <option value="Have">Have</option>
                   </Select>
-                  <Select size="xs">
+                  <Select
+                    name="hat"
+                    variant="unstyled"
+                    defaultValue={character.hat}
+                    onChange={(e) => handleChange(e, index)}
+                  >
                     <option value="Don't need">Don't need</option>
                     <option value="Need">Need</option>
                     <option value="Have">Have</option>
                   </Select>
-                  <Select size="xs">
+                  <Select
+                    name="armorUpgrade"
+                    variant="unstyled"
+                    defaultValue={character.armorUpgrade}
+                    onChange={(e) => handleChange(e, index)}
+                  >
+                    <option value="Don't need">Don't need</option>
+                    <option value="Need">Need</option>
+                    <option value="Have">Have</option>
+                  </Select>
+                  <Select
+                    name="weaponUpgrade"
+                    variant="unstyled"
+                    defaultValue={character.weaponUpgrade}
+                    onChange={(e) => handleChange(e, index)}
+                  >
                     <option value="Don't need">Don't need</option>
                     <option value="Need">Need</option>
                     <option value="Have">Have</option>
                   </Select>
                 </HStack>
               </Td>
-              <Td>
+              <Td colSpan={2}>
                 <HStack>
-                  <Select size="xs">
+                  <Select
+                    name="chest"
+                    variant="unstyled"
+                    defaultValue={character.chest}
+                    onChange={(e) => handleChange(e, index)}
+                  >
                     <option value="Don't need">Don't need</option>
                     <option value="Need">Need</option>
                     <option value="Have">Have</option>
                   </Select>
-                  <Select size="xs">
+                  <Select
+                    name="weapon"
+                    variant="unstyled"
+                    defaultValue={character.weapon}
+                    onChange={(e) => handleChange(e, index)}
+                  >
                     <option value="Don't need">Don't need</option>
                     <option value="Need">Need</option>
                     <option value="Have">Have</option>
@@ -150,16 +267,9 @@ const Home: FC<Props> = ({ characters }) => {
                   <EditIcon boxSize={6} color="blue.500" />
                 </Link>
                 &nbsp; &nbsp;
-                <a
-                  href=""
-                  onClick={() => {
-                    axios.delete(
-                      `${process.env.NEXT_PUBLIC_API_URL}/api/characters/${character.id}`
-                    );
-                  }}
-                >
-                  <DeleteIcon boxSize={6} color="red.500" />
-                </a>
+                <Link href={character.gearset} target="_blank">
+                  <ExternalLinkIcon boxSize={6} />
+                </Link>
               </Td>
             </Tr>
           ))}
