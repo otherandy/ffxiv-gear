@@ -1,5 +1,7 @@
 import { ChangeEvent, FC } from 'react';
 import { Character } from '../interfaces';
+import { getColorScheme } from '../utils/character';
+import { getColor } from '../utils/needs';
 import axios from 'axios';
 
 import Link from 'next/link';
@@ -33,7 +35,7 @@ const Home: FC<Props> = ({ characters }) => {
       .put(`${process.env.NEXT_PUBLIC_API_URL}/api/characters/${id}`, {
         [name]: value,
       })
-      .catch((err) => console.log(err));
+      .catch(() => {});
   };
 
   return (
@@ -76,52 +78,62 @@ const Home: FC<Props> = ({ characters }) => {
                 <Input
                   name="name"
                   variant="unstyled"
-                  defaultValue={character.name}
+                  value={character.name}
                   onChange={(e) => handleChange(e, index)}
                 />
-                <Tag colorScheme="green">{character.job}</Tag>
+                <Tag colorScheme={getColorScheme(character)}>
+                  {character.job}
+                </Tag>
               </Td>
               <Td colSpan={4}>
                 <HStack>
                   <Select
                     name="bracelet"
                     variant="unstyled"
-                    defaultValue={character.bracelet}
+                    bg={getColor(character.bracelet)}
+                    value={character.bracelet}
                     onChange={(e) => handleChange(e, index)}
                   >
                     <option value="Don't need">Don't need</option>
                     <option value="Need">Need</option>
                     <option value="Have">Have</option>
+                    <option value="Need more">Need more</option>
                   </Select>
                   <Select
                     name="earrings"
                     variant="unstyled"
-                    defaultValue={character.earrings}
+                    bg={getColor(character.earrings)}
+                    value={character.earrings}
                     onChange={(e) => handleChange(e, index)}
                   >
                     <option value="Don't need">Don't need</option>
                     <option value="Need">Need</option>
                     <option value="Have">Have</option>
+                    <option value="Need more">Need more</option>
                   </Select>
                   <Select
                     name="necklace"
                     variant="unstyled"
-                    defaultValue={character.necklace}
+                    bg={getColor(character.necklace)}
+                    value={character.necklace}
                     onChange={(e) => handleChange(e, index)}
                   >
                     <option value="Don't need">Don't need</option>
                     <option value="Need">Need</option>
                     <option value="Have">Have</option>
+                    <option value="Need more">Need more</option>
                   </Select>
                   <Select
                     name="rings"
                     variant="unstyled"
-                    defaultValue={character.rings}
+                    bg={getColor(character.rings)}
+                    value={character.rings}
                     onChange={(e) => handleChange(e, index)}
                   >
                     <option value="Don't need">Don't need</option>
                     <option value="Need">Need</option>
                     <option value="Have">Have</option>
+                    <option value="Need more">Need more</option>
                   </Select>
                 </HStack>
               </Td>
@@ -130,52 +142,62 @@ const Home: FC<Props> = ({ characters }) => {
                   <Select
                     name="boots"
                     variant="unstyled"
-                    defaultValue={character.boots}
+                    bg={getColor(character.boots)}
+                    value={character.boots}
                     onChange={(e) => handleChange(e, index)}
                   >
                     <option value="Don't need">Don't need</option>
                     <option value="Need">Need</option>
                     <option value="Have">Have</option>
+                    <option value="Need more">Need more</option>
                   </Select>
                   <Select
                     name="gloves"
                     variant="unstyled"
-                    defaultValue={character.gloves}
+                    bg={getColor(character.gloves)}
+                    value={character.gloves}
                     onChange={(e) => handleChange(e, index)}
                   >
                     <option value="Don't need">Don't need</option>
                     <option value="Need">Need</option>
                     <option value="Have">Have</option>
+                    <option value="Need more">Need more</option>
                   </Select>
                   <Select
                     name="hat"
                     variant="unstyled"
-                    defaultValue={character.hat}
+                    bg={getColor(character.hat)}
+                    value={character.hat}
                     onChange={(e) => handleChange(e, index)}
                   >
                     <option value="Don't need">Don't need</option>
                     <option value="Need">Need</option>
                     <option value="Have">Have</option>
+                    <option value="Need more">Need more</option>
                   </Select>
                   <Select
                     name="accessoryUpgrade"
                     variant="unstyled"
-                    defaultValue={character.accessoryUpgrade}
+                    bg={getColor(character.accessoryUpgrade)}
+                    value={character.accessoryUpgrade}
                     onChange={(e) => handleChange(e, index)}
                   >
                     <option value="Don't need">Don't need</option>
                     <option value="Need">Need</option>
                     <option value="Have">Have</option>
+                    <option value="Need more">Need more</option>
                   </Select>
                   <Select
                     name="tomeWeapon"
                     variant="unstyled"
-                    defaultValue={character.tomeWeapon}
+                    bg={getColor(character.tomeWeapon)}
+                    value={character.tomeWeapon}
                     onChange={(e) => handleChange(e, index)}
                   >
                     <option value="Don't need">Don't need</option>
                     <option value="Need">Need</option>
                     <option value="Have">Have</option>
+                    <option value="Need more">Need more</option>
                   </Select>
                 </HStack>
               </Td>
@@ -184,52 +206,62 @@ const Home: FC<Props> = ({ characters }) => {
                   <Select
                     name="boots"
                     variant="unstyled"
-                    defaultValue={character.boots}
+                    bg={getColor(character.boots)}
+                    value={character.boots}
                     onChange={(e) => handleChange(e, index)}
                   >
                     <option value="Don't need">Don't need</option>
                     <option value="Need">Need</option>
                     <option value="Have">Have</option>
+                    <option value="Need more">Need more</option>
                   </Select>
                   <Select
                     name="legs"
                     variant="unstyled"
-                    defaultValue={character.legs}
+                    bg={getColor(character.legs)}
+                    value={character.legs}
                     onChange={(e) => handleChange(e, index)}
                   >
                     <option value="Don't need">Don't need</option>
                     <option value="Need">Need</option>
                     <option value="Have">Have</option>
+                    <option value="Need more">Need more</option>
                   </Select>
                   <Select
                     name="hat"
                     variant="unstyled"
-                    defaultValue={character.hat}
+                    bg={getColor(character.hat)}
+                    value={character.hat}
                     onChange={(e) => handleChange(e, index)}
                   >
                     <option value="Don't need">Don't need</option>
                     <option value="Need">Need</option>
                     <option value="Have">Have</option>
+                    <option value="Need more">Need more</option>
                   </Select>
                   <Select
                     name="armorUpgrade"
                     variant="unstyled"
-                    defaultValue={character.armorUpgrade}
+                    bg={getColor(character.armorUpgrade)}
+                    value={character.armorUpgrade}
                     onChange={(e) => handleChange(e, index)}
                   >
                     <option value="Don't need">Don't need</option>
                     <option value="Need">Need</option>
                     <option value="Have">Have</option>
+                    <option value="Need more">Need more</option>
                   </Select>
                   <Select
                     name="weaponUpgrade"
                     variant="unstyled"
-                    defaultValue={character.weaponUpgrade}
+                    bg={getColor(character.weaponUpgrade)}
+                    value={character.weaponUpgrade}
                     onChange={(e) => handleChange(e, index)}
                   >
                     <option value="Don't need">Don't need</option>
                     <option value="Need">Need</option>
                     <option value="Have">Have</option>
+                    <option value="Need more">Need more</option>
                   </Select>
                 </HStack>
               </Td>
@@ -238,22 +270,26 @@ const Home: FC<Props> = ({ characters }) => {
                   <Select
                     name="chest"
                     variant="unstyled"
-                    defaultValue={character.chest}
+                    bg={getColor(character.chest)}
+                    value={character.chest}
                     onChange={(e) => handleChange(e, index)}
                   >
                     <option value="Don't need">Don't need</option>
                     <option value="Need">Need</option>
                     <option value="Have">Have</option>
+                    <option value="Need more">Need more</option>
                   </Select>
                   <Select
                     name="weapon"
                     variant="unstyled"
-                    defaultValue={character.weapon}
+                    bg={getColor(character.weapon)}
+                    value={character.weapon}
                     onChange={(e) => handleChange(e, index)}
                   >
                     <option value="Don't need">Don't need</option>
                     <option value="Need">Need</option>
                     <option value="Have">Have</option>
+                    <option value="Need more">Need more</option>
                   </Select>
                 </HStack>
               </Td>
