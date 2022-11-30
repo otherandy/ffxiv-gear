@@ -47,9 +47,11 @@ db.once('open', () => {
 });
 
 io.on('connection', (socket: Socket) => {
-  console.log(`User connected ${socket.id}`);
+  io.emit('clients', io.engine.clientsCount);
 
-  socket.on('disconnect', () => console.log(`User disconnected ${socket.id}`));
+  socket.on('disconnect', () => {
+    io.emit('clients', io.engine.clientsCount);
+  });
 });
 
 server.listen(port, () => console.log(`Server is running on port ${port}`));

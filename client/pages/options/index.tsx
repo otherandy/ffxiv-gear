@@ -15,7 +15,7 @@ export default function Options() {
   const toast = useToast();
   const [isLoading, setIsLoading] = useState(false);
 
-  const createCharacter = (toast: any) => {
+  const createCharacter = () => {
     setIsLoading(true);
     axios
       .post(`${process.env.NEXT_PUBLIC_API_URL}/api/characters`)
@@ -45,9 +45,7 @@ export default function Options() {
         <CardBody>
           <Button
             colorScheme="blue"
-            onClick={(_) => {
-              createCharacter(toast);
-            }}
+            onClick={createCharacter}
             isLoading={isLoading}
           >
             Create New Character

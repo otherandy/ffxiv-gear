@@ -11,10 +11,10 @@ datasource db {
 }
 
 model Character {
-  id      String  @id @default(auto()) @map("_id") @db.ObjectId
-  name    String  @default("New Character")
-  role    String? @default("Unknown")
-  gearset String  @default("https://etro.gg/")
+  id      String @id @default(auto()) @map("_id") @db.ObjectId
+  name    String @default("New Character")
+  role    String @default("Unknown")
+  gearset String @default("https://etro.gg/")
 
   weapon   String @default("Don't need")
   hat      String @default("Don't need")

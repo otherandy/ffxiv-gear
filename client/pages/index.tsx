@@ -1,12 +1,10 @@
-import Link from 'next/link';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { Character } from '../interfaces';
-import { getColorScheme } from '../utils/character';
-import { getColor } from '../utils/needs';
+import useSocket from '../hooks/socket';
 import axios from 'axios';
-import io from 'socket.io-client';
 
+import Link from 'next/link';
 import {
   HStack,
   Select,
@@ -20,8 +18,7 @@ import {
   Tr,
 } from '@chakra-ui/react';
 import { EditIcon, ExternalLinkIcon } from '@chakra-ui/icons';
-
-const socket = io(process.env.NEXT_PUBLIC_API_URL!);
+import { characterColor, needColor } from '../styles/colors';
 
 export const getServerSideProps: GetServerSideProps<{
   data: Character[];
@@ -39,6 +36,7 @@ export const getServerSideProps: GetServerSideProps<{
 export default function Home({
   data,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const socket = useSocket();
   const [characters, setCharacters] = useState<Character[]>(data);
 
   useEffect(() => {
@@ -112,7 +110,7 @@ export default function Home({
           {characters.map((character, index) => (
             <Tr key={character.id}>
               <Td>
-                <Tag colorScheme={getColorScheme(character)}>
+                <Tag colorScheme={characterColor(character)}>
                   {character.name}
                 </Tag>
               </Td>
@@ -121,7 +119,7 @@ export default function Home({
                   <Select
                     name="bracelet"
                     variant="unstyled"
-                    bg={getColor(character.bracelet)}
+                    bg={needColor(character.bracelet)}
                     value={character.bracelet}
                     onChange={(e) => handleChange(e, index)}
                   >
@@ -133,7 +131,7 @@ export default function Home({
                   <Select
                     name="earrings"
                     variant="unstyled"
-                    bg={getColor(character.earrings)}
+                    bg={needColor(character.earrings)}
                     value={character.earrings}
                     onChange={(e) => handleChange(e, index)}
                   >
@@ -145,7 +143,7 @@ export default function Home({
                   <Select
                     name="necklace"
                     variant="unstyled"
-                    bg={getColor(character.necklace)}
+                    bg={needColor(character.necklace)}
                     value={character.necklace}
                     onChange={(e) => handleChange(e, index)}
                   >
@@ -157,7 +155,7 @@ export default function Home({
                   <Select
                     name="rings"
                     variant="unstyled"
-                    bg={getColor(character.rings)}
+                    bg={needColor(character.rings)}
                     value={character.rings}
                     onChange={(e) => handleChange(e, index)}
                   >
@@ -173,7 +171,7 @@ export default function Home({
                   <Select
                     name="boots"
                     variant="unstyled"
-                    bg={getColor(character.boots)}
+                    bg={needColor(character.boots)}
                     value={character.boots}
                     onChange={(e) => handleChange(e, index)}
                   >
@@ -185,7 +183,7 @@ export default function Home({
                   <Select
                     name="gloves"
                     variant="unstyled"
-                    bg={getColor(character.gloves)}
+                    bg={needColor(character.gloves)}
                     value={character.gloves}
                     onChange={(e) => handleChange(e, index)}
                   >
@@ -197,7 +195,7 @@ export default function Home({
                   <Select
                     name="hat"
                     variant="unstyled"
-                    bg={getColor(character.hat)}
+                    bg={needColor(character.hat)}
                     value={character.hat}
                     onChange={(e) => handleChange(e, index)}
                   >
@@ -209,7 +207,7 @@ export default function Home({
                   <Select
                     name="accessoryUpgrade"
                     variant="unstyled"
-                    bg={getColor(character.accessoryUpgrade)}
+                    bg={needColor(character.accessoryUpgrade)}
                     value={character.accessoryUpgrade}
                     onChange={(e) => handleChange(e, index)}
                   >
@@ -221,7 +219,7 @@ export default function Home({
                   <Select
                     name="tomeWeapon"
                     variant="unstyled"
-                    bg={getColor(character.tomeWeapon)}
+                    bg={needColor(character.tomeWeapon)}
                     value={character.tomeWeapon}
                     onChange={(e) => handleChange(e, index)}
                   >
@@ -237,7 +235,7 @@ export default function Home({
                   <Select
                     name="boots"
                     variant="unstyled"
-                    bg={getColor(character.boots)}
+                    bg={needColor(character.boots)}
                     value={character.boots}
                     onChange={(e) => handleChange(e, index)}
                   >
@@ -249,7 +247,7 @@ export default function Home({
                   <Select
                     name="legs"
                     variant="unstyled"
-                    bg={getColor(character.legs)}
+                    bg={needColor(character.legs)}
                     value={character.legs}
                     onChange={(e) => handleChange(e, index)}
                   >
@@ -261,7 +259,7 @@ export default function Home({
                   <Select
                     name="hat"
                     variant="unstyled"
-                    bg={getColor(character.hat)}
+                    bg={needColor(character.hat)}
                     value={character.hat}
                     onChange={(e) => handleChange(e, index)}
                   >
@@ -273,7 +271,7 @@ export default function Home({
                   <Select
                     name="armorUpgrade"
                     variant="unstyled"
-                    bg={getColor(character.armorUpgrade)}
+                    bg={needColor(character.armorUpgrade)}
                     value={character.armorUpgrade}
                     onChange={(e) => handleChange(e, index)}
                   >
@@ -285,7 +283,7 @@ export default function Home({
                   <Select
                     name="weaponUpgrade"
                     variant="unstyled"
-                    bg={getColor(character.weaponUpgrade)}
+                    bg={needColor(character.weaponUpgrade)}
                     value={character.weaponUpgrade}
                     onChange={(e) => handleChange(e, index)}
                   >
@@ -301,7 +299,7 @@ export default function Home({
                   <Select
                     name="chest"
                     variant="unstyled"
-                    bg={getColor(character.chest)}
+                    bg={needColor(character.chest)}
                     value={character.chest}
                     onChange={(e) => handleChange(e, index)}
                   >
@@ -313,7 +311,7 @@ export default function Home({
                   <Select
                     name="weapon"
                     variant="unstyled"
-                    bg={getColor(character.weapon)}
+                    bg={needColor(character.weapon)}
                     value={character.weapon}
                     onChange={(e) => handleChange(e, index)}
                   >

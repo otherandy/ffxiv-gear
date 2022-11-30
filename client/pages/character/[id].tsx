@@ -29,7 +29,7 @@ import {
   useToast,
 } from '@chakra-ui/react';
 import { DeleteIcon, RepeatIcon } from '@chakra-ui/icons';
-import { getColorScheme } from '../../utils/character';
+import { characterColor } from '../../styles/colors';
 
 export const getServerSideProps: GetServerSideProps<{
   data: Character;
@@ -50,11 +50,10 @@ export default function Edit({
   data,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const router = useRouter();
-
-  const [character, setCharacter] = useState<Character>(data);
-
   const toast = useToast();
+
   const [isLoading, setIsLoading] = useState(false);
+  const [character, setCharacter] = useState<Character>(data);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const handleSubmit = async (e: any) => {
@@ -157,7 +156,7 @@ export default function Edit({
               <Select
                 name="role"
                 defaultValue={character.role}
-                borderColor={getColorScheme(character)}
+                borderColor={characterColor(character)}
                 onChange={handleChange}
               >
                 <option value="Tank">Tank</option>
@@ -195,9 +194,9 @@ export default function Edit({
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Delete</ModalHeader>
+          <ModalHeader>Delete Character</ModalHeader>
           <ModalCloseButton />
-          <ModalBody>Are you sure?</ModalBody>
+          <ModalBody>Are you sure? This cannot be undone.</ModalBody>
           <ModalFooter>
             <Button colorScheme="blue" mr={3} onClick={onClose}>
               Cancel
