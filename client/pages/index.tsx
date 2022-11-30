@@ -94,7 +94,7 @@ const Home: FC<Props> = ({ characters }) => {
                     value={character.bracelet}
                     onChange={(e) => handleChange(e, index)}
                   >
-                    <option value="Don't need">Don't need</option>
+                    <option value="Don't need">Don&#39;t need</option>
                     <option value="Need">Need</option>
                     <option value="Have">Have</option>
                     <option value="Need more">Need more</option>
@@ -106,7 +106,7 @@ const Home: FC<Props> = ({ characters }) => {
                     value={character.earrings}
                     onChange={(e) => handleChange(e, index)}
                   >
-                    <option value="Don't need">Don't need</option>
+                    <option value="Don't need">Don&#39;t need</option>
                     <option value="Need">Need</option>
                     <option value="Have">Have</option>
                     <option value="Need more">Need more</option>
@@ -118,7 +118,7 @@ const Home: FC<Props> = ({ characters }) => {
                     value={character.necklace}
                     onChange={(e) => handleChange(e, index)}
                   >
-                    <option value="Don't need">Don't need</option>
+                    <option value="Don't need">Don&#39;t need</option>
                     <option value="Need">Need</option>
                     <option value="Have">Have</option>
                     <option value="Need more">Need more</option>
@@ -130,7 +130,7 @@ const Home: FC<Props> = ({ characters }) => {
                     value={character.rings}
                     onChange={(e) => handleChange(e, index)}
                   >
-                    <option value="Don't need">Don't need</option>
+                    <option value="Don't need">Don&#39;t need</option>
                     <option value="Need">Need</option>
                     <option value="Have">Have</option>
                     <option value="Need more">Need more</option>
@@ -146,7 +146,7 @@ const Home: FC<Props> = ({ characters }) => {
                     value={character.boots}
                     onChange={(e) => handleChange(e, index)}
                   >
-                    <option value="Don't need">Don't need</option>
+                    <option value="Don't need">Don&#39;t need</option>
                     <option value="Need">Need</option>
                     <option value="Have">Have</option>
                     <option value="Need more">Need more</option>
@@ -158,7 +158,7 @@ const Home: FC<Props> = ({ characters }) => {
                     value={character.gloves}
                     onChange={(e) => handleChange(e, index)}
                   >
-                    <option value="Don't need">Don't need</option>
+                    <option value="Don't need">Don&#39;t need</option>
                     <option value="Need">Need</option>
                     <option value="Have">Have</option>
                     <option value="Need more">Need more</option>
@@ -170,7 +170,7 @@ const Home: FC<Props> = ({ characters }) => {
                     value={character.hat}
                     onChange={(e) => handleChange(e, index)}
                   >
-                    <option value="Don't need">Don't need</option>
+                    <option value="Don't need">Don&#39;t need</option>
                     <option value="Need">Need</option>
                     <option value="Have">Have</option>
                     <option value="Need more">Need more</option>
@@ -182,7 +182,7 @@ const Home: FC<Props> = ({ characters }) => {
                     value={character.accessoryUpgrade}
                     onChange={(e) => handleChange(e, index)}
                   >
-                    <option value="Don't need">Don't need</option>
+                    <option value="Don't need">Don&#39;t need</option>
                     <option value="Need">Need</option>
                     <option value="Have">Have</option>
                     <option value="Need more">Need more</option>
@@ -194,7 +194,7 @@ const Home: FC<Props> = ({ characters }) => {
                     value={character.tomeWeapon}
                     onChange={(e) => handleChange(e, index)}
                   >
-                    <option value="Don't need">Don't need</option>
+                    <option value="Don't need">Don&#39;t need</option>
                     <option value="Need">Need</option>
                     <option value="Have">Have</option>
                     <option value="Need more">Need more</option>
@@ -210,7 +210,7 @@ const Home: FC<Props> = ({ characters }) => {
                     value={character.boots}
                     onChange={(e) => handleChange(e, index)}
                   >
-                    <option value="Don't need">Don't need</option>
+                    <option value="Don't need">Don&#39;t need</option>
                     <option value="Need">Need</option>
                     <option value="Have">Have</option>
                     <option value="Need more">Need more</option>
@@ -222,7 +222,7 @@ const Home: FC<Props> = ({ characters }) => {
                     value={character.legs}
                     onChange={(e) => handleChange(e, index)}
                   >
-                    <option value="Don't need">Don't need</option>
+                    <option value="Don't need">Don&#39;t need</option>
                     <option value="Need">Need</option>
                     <option value="Have">Have</option>
                     <option value="Need more">Need more</option>
@@ -234,7 +234,7 @@ const Home: FC<Props> = ({ characters }) => {
                     value={character.hat}
                     onChange={(e) => handleChange(e, index)}
                   >
-                    <option value="Don't need">Don't need</option>
+                    <option value="Don't need">Don&#39;t need</option>
                     <option value="Need">Need</option>
                     <option value="Have">Have</option>
                     <option value="Need more">Need more</option>
@@ -246,7 +246,7 @@ const Home: FC<Props> = ({ characters }) => {
                     value={character.armorUpgrade}
                     onChange={(e) => handleChange(e, index)}
                   >
-                    <option value="Don't need">Don't need</option>
+                    <option value="Don't need">Don&#39;t need</option>
                     <option value="Need">Need</option>
                     <option value="Have">Have</option>
                     <option value="Need more">Need more</option>
@@ -258,7 +258,7 @@ const Home: FC<Props> = ({ characters }) => {
                     value={character.weaponUpgrade}
                     onChange={(e) => handleChange(e, index)}
                   >
-                    <option value="Don't need">Don't need</option>
+                    <option value="Don't need">Don&#39;t need</option>
                     <option value="Need">Need</option>
                     <option value="Have">Have</option>
                     <option value="Need more">Need more</option>
@@ -274,7 +274,7 @@ const Home: FC<Props> = ({ characters }) => {
                     value={character.chest}
                     onChange={(e) => handleChange(e, index)}
                   >
-                    <option value="Don't need">Don't need</option>
+                    <option value="Don't need">Don&#39;t need</option>
                     <option value="Need">Need</option>
                     <option value="Have">Have</option>
                     <option value="Need more">Need more</option>
@@ -286,7 +286,7 @@ const Home: FC<Props> = ({ characters }) => {
                     value={character.weapon}
                     onChange={(e) => handleChange(e, index)}
                   >
-                    <option value="Don't need">Don't need</option>
+                    <option value="Don't need">Don&#39;t need</option>
                     <option value="Need">Need</option>
                     <option value="Have">Have</option>
                     <option value="Need more">Need more</option>
