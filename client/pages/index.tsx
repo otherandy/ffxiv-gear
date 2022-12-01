@@ -38,23 +38,26 @@ export const getServerSideProps: GetServerSideProps<{
 export default function Home({
   data,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const [characters, setCharacters] = useState<Character[]>(data);
+  const [characters, setCharacters] = useState(data);
 
   useEffect(() => {
     socket.on('insert', (character: Character) => {
-      setCharacters((characters) => [...characters, character]);
+      setCharacters([...characters, character]);
     });
 
     socket.on('update', (character: Character) => {
-      setCharacters((characters) => {
-        const index = characters.findIndex((c) => c.id === character.id);
-        characters[index] = character;
-        return [...characters];
-      });
+      setCharacters(
+        characters.map((c) => {
+          if (c.id === character.id) {
+            return character;
+          }
+          return c;
+        })
+      );
     });
 
     socket.on('delete', (id: string) => {
-      setCharacters((characters) => characters.filter((c) => c.id !== id));
+      setCharacters(characters.filter((c) => c.id !== id));
     });
 
     return () => {

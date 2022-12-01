@@ -58,7 +58,7 @@ export default function Edit({
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const OverlayDelete = () => (
+  const ModalContentDelete = () => (
     <ModalContent>
       <ModalHeader>Delete Character</ModalHeader>
       <ModalCloseButton />
@@ -84,7 +84,7 @@ export default function Edit({
     </ModalContent>
   );
 
-  const OverlayUpdate = () => (
+  const ModalContentUpdate = () => (
     <ModalContent>
       <ModalHeader>Update Gearset</ModalHeader>
       <ModalCloseButton />
@@ -112,7 +112,7 @@ export default function Edit({
     </ModalContent>
   );
 
-  const [overlay, setOverlay] = useState(<OverlayDelete />);
+  const [content, setContent] = useState(<ModalContentDelete />);
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
@@ -262,7 +262,7 @@ export default function Edit({
                 <Tooltip label="Update Gearset" aria-label="Update gearset">
                   <Button
                     onClick={() => {
-                      setOverlay(<OverlayUpdate />);
+                      setContent(<ModalContentUpdate />);
                       onOpen();
                     }}
                   >
@@ -286,7 +286,7 @@ export default function Edit({
           <Button
             variant="link"
             onClick={() => {
-              setOverlay(<OverlayDelete />);
+              setContent(<ModalContentDelete />);
               onOpen();
             }}
           >
@@ -297,7 +297,7 @@ export default function Edit({
 
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
-        {overlay}
+        {content}
       </Modal>
     </Container>
   );
