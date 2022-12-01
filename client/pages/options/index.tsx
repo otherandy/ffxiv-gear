@@ -15,10 +15,10 @@ export default function Options() {
   const toast = useToast();
   const [isLoading, setIsLoading] = useState(false);
 
-  const createCharacter = () => {
+  const createCharacter = async () => {
     setIsLoading(true);
-    axios
-      .post(`${process.env.NEXT_PUBLIC_API_URL}/api/characters`)
+    await axios
+      .post(`${process.env.NEXT_PUBLIC_API_URL}/characters`)
       .then(() => {
         toast({
           title: 'Character created.',

@@ -25,6 +25,7 @@ import {
   ModalHeader,
   ModalOverlay,
   Select,
+  Tooltip,
   useDisclosure,
   useToast,
 } from '@chakra-ui/react';
@@ -35,7 +36,7 @@ export const getServerSideProps: GetServerSideProps<{
   data: Character;
 }> = async (context) => {
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/characters/${context.query.id}`
+    `${process.env.NEXT_PUBLIC_API_URL}/characters/${context.query.id}`
   );
   const data = await res.json();
 
@@ -54,7 +55,64 @@ export default function Edit({
 
   const [isLoading, setIsLoading] = useState(false);
   const [character, setCharacter] = useState<Character>(data);
+
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const OverlayDelete = () => (
+    <ModalContent>
+      <ModalHeader>Delete Character</ModalHeader>
+      <ModalCloseButton />
+      <ModalBody>Are you sure? This cannot be undone.</ModalBody>
+      <ModalFooter>
+        <Button
+          colorScheme="blue"
+          mr={3}
+          onClick={onClose}
+          disabled={isLoading}
+        >
+          Cancel
+        </Button>
+        <Button
+          variant="outline"
+          colorScheme="red"
+          onClick={handleDelete}
+          isLoading={isLoading}
+        >
+          Delete
+        </Button>
+      </ModalFooter>
+    </ModalContent>
+  );
+
+  const OverlayUpdate = () => (
+    <ModalContent>
+      <ModalHeader>Update Gearset</ModalHeader>
+      <ModalCloseButton />
+      <ModalBody>
+        Are you sure? This will overwrite your current data.
+      </ModalBody>
+      <ModalFooter>
+        <Button
+          colorScheme="blue"
+          mr={3}
+          onClick={onClose}
+          disabled={isLoading}
+        >
+          Cancel
+        </Button>
+        <Button
+          variant="outline"
+          colorScheme="orange"
+          onClick={handleUpdate}
+          isLoading={isLoading}
+        >
+          Overwrite
+        </Button>
+      </ModalFooter>
+    </ModalContent>
+  );
+
+  const [overlay, setOverlay] = useState(<OverlayDelete />);
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
@@ -76,7 +134,7 @@ export default function Edit({
 
     await axios
       .put(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/characters/${character.id}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/characters/${character.id}`,
         data
       )
       .then(() => {
@@ -97,10 +155,9 @@ export default function Edit({
   };
 
   const handleDelete = async () => {
-    axios
-      .delete(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/characters/${character.id}`
-      )
+    setIsLoading(true);
+    await axios
+      .delete(`${process.env.NEXT_PUBLIC_API_URL}/characters/${character.id}`)
       .then(() => {
         toast({
           title: 'Character deleted.',
@@ -116,6 +173,7 @@ export default function Edit({
           isClosable: true,
         });
       });
+    setIsLoading(false);
   };
 
   const handleChange = (
@@ -126,11 +184,40 @@ export default function Edit({
   };
 
   const handleUpdate = async () => {
-    toast({
-      title: 'Not implemented yet.',
-      status: 'info',
-      isClosable: true,
-    });
+    setIsLoading(true);
+    await axios
+      .post(`${process.env.NEXT_PUBLIC_API_URL}/etro/${character.id}`, {
+        url: character.gearset,
+      })
+      .then((res) => {
+        if (res.status === 200) {
+          const { name, jobAbbrev, patch } = res.data;
+          toast({
+            title: 'Character updated.',
+            description: `Filled needs with ${name} for ${jobAbbrev} [Patch ${patch}].`,
+            status: 'success',
+            isClosable: true,
+          });
+        }
+        if (res.status === 400) {
+          toast({
+            title: 'Error updating character.',
+            description: res.data.message,
+            status: 'error',
+            isClosable: true,
+          });
+        }
+      })
+      .catch((err) => {
+        toast({
+          title: 'Server error.',
+          description: err.response.data.message,
+          status: 'error',
+          isClosable: true,
+        });
+      })
+      .finally(onClose);
+    setIsLoading(false);
   };
 
   return (
@@ -167,10 +254,21 @@ export default function Edit({
             <FormControl>
               <FormLabel>Gearset</FormLabel>
               <HStack>
-                <Input name="gearset" defaultValue={character.gearset} />
-                <Button onClick={handleUpdate}>
-                  <RepeatIcon boxSize={6} />
-                </Button>
+                <Input
+                  name="gearset"
+                  defaultValue={character.gearset}
+                  onChange={handleChange}
+                />
+                <Tooltip label="Update Gearset" aria-label="Update gearset">
+                  <Button
+                    onClick={() => {
+                      setOverlay(<OverlayUpdate />);
+                      onOpen();
+                    }}
+                  >
+                    <RepeatIcon boxSize={6} />
+                  </Button>
+                </Tooltip>
               </HStack>
               <FormHelperText>Please use an etro link.</FormHelperText>
             </FormControl>
@@ -185,7 +283,13 @@ export default function Edit({
           </form>
         </CardBody>
         <CardFooter>
-          <Button variant="link" onClick={onOpen}>
+          <Button
+            variant="link"
+            onClick={() => {
+              setOverlay(<OverlayDelete />);
+              onOpen();
+            }}
+          >
             <DeleteIcon boxSize={6} color="red.500" />
           </Button>
         </CardFooter>
@@ -193,19 +297,7 @@ export default function Edit({
 
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Delete Character</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>Are you sure? This cannot be undone.</ModalBody>
-          <ModalFooter>
-            <Button colorScheme="blue" mr={3} onClick={onClose}>
-              Cancel
-            </Button>
-            <Button variant="ghost" colorScheme="red" onClick={handleDelete}>
-              Delete
-            </Button>
-          </ModalFooter>
-        </ModalContent>
+        {overlay}
       </Modal>
     </Container>
   );

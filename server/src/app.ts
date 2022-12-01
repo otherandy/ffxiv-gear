@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 
 import characterRoutes from './routes/character';
+import etroRoutes from './routes/etro';
 
 const app = express();
 
@@ -10,6 +11,7 @@ app.use(cors());
 app.use(express.json());
 
 // routes
-app.use('/api/characters', characterRoutes);
+app.use('/characters', characterRoutes);
+app.use('/etro', etroRoutes);
 
 export default app;

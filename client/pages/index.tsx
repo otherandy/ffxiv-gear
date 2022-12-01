@@ -23,7 +23,7 @@ import { characterColor, needColor } from '../styles/colors';
 export const getServerSideProps: GetServerSideProps<{
   data: Character[];
 }> = async () => {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/characters`);
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/characters`);
   const data = await res.json();
 
   return {
@@ -67,10 +67,10 @@ export default function Home({
     const { name, value } = e.target;
     const id = characters[index].id;
     axios
-      .put(`${process.env.NEXT_PUBLIC_API_URL}/api/characters/${id}`, {
+      .put(`${process.env.NEXT_PUBLIC_API_URL}/characters/${id}`, {
         [name]: value,
       })
-      .catch((err) => console.error(err));
+      .catch();
   };
 
   return (

@@ -32,9 +32,6 @@ db.once('open', () => {
         io.emit('insert', change.fullDocument);
         break;
       case 'update':
-        const updatedCharacter = change.fullDocument!;
-        updatedCharacter.id = updatedCharacter._id;
-        delete updatedCharacter._id;
         io.emit('update', change.fullDocument);
         break;
       case 'delete':
