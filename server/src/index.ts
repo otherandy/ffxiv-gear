@@ -29,10 +29,16 @@ db.once('open', () => {
   characterStream.on('change', (change) => {
     switch (change.operationType) {
       case 'insert':
+        const newCharacter = change.fullDocument;
+        newCharacter.id = newCharacter._id;
+        delete newCharacter._id;
         io.emit('insert', change.fullDocument);
         break;
       case 'update':
-        io.emit('update', change.fullDocument);
+        const updatedCharacter = change.fullDocument!;
+        updatedCharacter.id = updatedCharacter._id;
+        delete updatedCharacter._id;
+        io.emit('update', updatedCharacter);
         break;
       case 'delete':
         io.emit('delete', change.documentKey._id);
