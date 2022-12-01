@@ -4,7 +4,7 @@ dotenv.config();
 import http from 'http';
 import mongoose from 'mongoose';
 import app from './app';
-import { Server, Socket } from 'socket.io';
+import { Server } from 'socket.io';
 
 const port = process.env.PORT || 4000;
 const server = http.createServer(app);
@@ -40,14 +40,6 @@ db.once('open', () => {
       default:
         break;
     }
-  });
-});
-
-io.on('connection', (socket: Socket) => {
-  io.emit('clients', io.engine.clientsCount);
-
-  socket.on('disconnect', () => {
-    io.emit('clients', io.engine.clientsCount);
   });
 });
 

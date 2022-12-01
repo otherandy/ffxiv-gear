@@ -1,7 +1,7 @@
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { Character } from '../interfaces';
-import useSocket from '../hooks/socket';
+import { io } from 'socket.io-client';
 import axios from 'axios';
 
 import Link from 'next/link';
@@ -20,6 +20,8 @@ import {
 import { EditIcon, ExternalLinkIcon } from '@chakra-ui/icons';
 import { characterColor, needColor } from '../styles/colors';
 
+const socket = io(process.env.NEXT_PUBLIC_API_URL!);
+
 export const getServerSideProps: GetServerSideProps<{
   data: Character[];
 }> = async () => {
@@ -36,7 +38,6 @@ export const getServerSideProps: GetServerSideProps<{
 export default function Home({
   data,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const socket = useSocket();
   const [characters, setCharacters] = useState<Character[]>(data);
 
   useEffect(() => {
