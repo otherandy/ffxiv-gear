@@ -16,8 +16,8 @@ const updateGear = async (req: Request, res: Response, next: NextFunction) => {
     return res.status(400).json({ message: 'Invalid link.' });
   }
 
-  let etro = await axios.get(`${process.env.ETRO_URL}/gearsets/${gearset}`);
-  let data = etro.data;
+  const etro = await axios.get(`${process.env.ETRO_URL}/gearsets/${gearset}`);
+  const data = etro.data;
 
   const { name, jobAbbrev, patch } = data;
   const {
@@ -55,110 +55,96 @@ const updateGear = async (req: Request, res: Response, next: NextFunction) => {
   const w = await axios.get(`${process.env.ETRO_URL}/equipment/${weapon}`);
   const raid = (w.data.name as string).split(' ').shift();
 
-  etro = await axios.get(`${process.env.ETRO_URL}/equipment/${head}`);
-  data = etro.data;
+  const equipmentUrl = `${process.env.ETRO_URL}/equipment/`;
+  const leftSide = [head, body, hands, legs, feet];
+  const rightSide = [ears, neck, wrists, fingerL, fingerR];
+  const requests = leftSide
+    .concat(rightSide)
+    .map((id) => axios.get(equipmentUrl + id));
 
-  if (!data.name.includes(raid)) {
-    update.hat = "Don't need";
-  }
-  if (data.name.includes('Augmented')) {
-    update.armorUpgrade = 'Need';
-  }
+  axios
+    .all(requests)
+    .then(
+      axios.spread((...res) => {
+        if (!res[0].data.name.includes(raid)) {
+          update.hat = "Don't need";
+        }
+        if (res[0].data.name.includes('Augmented')) {
+          update.armorUpgrade = 'Need';
+        }
 
-  etro = await axios.get(`${process.env.ETRO_URL}/equipment/${body}`);
-  data = etro.data;
+        if (!res[1].data.name.includes(raid)) {
+          update.chest = "Don't need";
+        }
+        if (res[1].data.name.includes('Augmented')) {
+          update.armorUpgrade = 'Need';
+        }
 
-  if (!data.name.includes(raid)) {
-    update.chest = "Don't need";
-  }
-  if (data.name.includes('Augmented')) {
-    update.armorUpgrade = 'Need';
-  }
+        if (!res[2].data.name.includes(raid)) {
+          update.gloves = "Don't need";
+        }
+        if (res[2].data.name.includes('Augmented')) {
+          update.armorUpgrade = 'Need';
+        }
 
-  etro = await axios.get(`${process.env.ETRO_URL}/equipment/${hands}`);
-  data = etro.data;
+        if (!res[3].data.name.includes(raid)) {
+          update.legs = "Don't need";
+        }
+        if (res[3].data.name.includes('Augmented')) {
+          update.armorUpgrade = 'Need';
+        }
 
-  if (!data.name.includes(raid)) {
-    update.gloves = "Don't need";
-  }
-  if (data.name.includes('Augmented')) {
-    update.armorUpgrade = 'Need';
-  }
+        if (!res[4].data.name.includes(raid)) {
+          update.boots = "Don't need";
+        }
+        if (res[4].data.name.includes('Augmented')) {
+          update.armorUpgrade = 'Need';
+        }
 
-  etro = await axios.get(`${process.env.ETRO_URL}/equipment/${legs}`);
-  data = etro.data;
+        if (!res[5].data.name.includes(raid)) {
+          update.earrings = "Don't need";
+        }
+        if (res[5].data.name.includes('Augmented')) {
+          update.accessoryUpgrade = 'Need';
+        }
 
-  if (!data.name.includes(raid)) {
-    update.legs = "Don't need";
-  }
-  if (data.name.includes('Augmented')) {
-    update.armorUpgrade = 'Need';
-  }
+        if (!res[6].data.name.includes(raid)) {
+          update.necklace = "Don't need";
+        }
+        if (res[6].data.name.includes('Augmented')) {
+          update.accessoryUpgrade = 'Need';
+        }
 
-  etro = await axios.get(`${process.env.ETRO_URL}/equipment/${feet}`);
-  data = etro.data;
+        if (!res[7].data.name.includes(raid)) {
+          update.bracelet = "Don't need";
+        }
+        if (res[7].data.name.includes('Augmented')) {
+          update.accessoryUpgrade = 'Need';
+        }
 
-  if (!data.name.includes(raid)) {
-    update.boots = "Don't need";
-  }
-  if (data.name.includes('Augmented')) {
-    update.armorUpgrade = 'Need';
-  }
+        if (res[8].data.name.includes(raid)) {
+          update.rings = 'Need';
+        }
+        if (res[8].data.name.includes('Augmented')) {
+          update.accessoryUpgrade = 'Need';
+        }
 
-  etro = await axios.get(`${process.env.ETRO_URL}/equipment/${ears}`);
-  data = etro.data;
-
-  if (!data.name.includes(raid)) {
-    update.earrings = "Don't need";
-  }
-  if (data.name.includes('Augmented')) {
-    update.accessoryUpgrade = 'Need';
-  }
-
-  etro = await axios.get(`${process.env.ETRO_URL}/equipment/${neck}`);
-  data = etro.data;
-
-  if (!data.name.includes(raid)) {
-    update.necklace = "Don't need";
-  }
-  if (data.name.includes('Augmented')) {
-    update.accessoryUpgrade = 'Need';
-  }
-
-  etro = await axios.get(`${process.env.ETRO_URL}/equipment/${wrists}`);
-  data = etro.data;
-
-  if (!data.name.includes(raid)) {
-    update.bracelet = "Don't need";
-  }
-  if (data.name.includes('Augmented')) {
-    update.accessoryUpgrade = 'Need';
-  }
-
-  etro = await axios.get(`${process.env.ETRO_URL}/equipment/${fingerL}`);
-  data = etro.data;
-
-  if (data.name.includes(raid)) {
-    update.rings = 'Need';
-  }
-  if (data.name.includes('Augmented')) {
-    update.accessoryUpgrade = 'Need';
-  }
-
-  etro = await axios.get(`${process.env.ETRO_URL}/equipment/${fingerR}`);
-  data = etro.data;
-
-  if (data.name.includes(raid)) {
-    update.rings = 'Need';
-  }
-  if (data.name.includes('Augmented')) {
-    update.accessoryUpgrade = 'Need';
-  }
+        if (res[9].data.name.includes(raid)) {
+          update.rings = 'Need';
+        }
+        if (res[9].data.name.includes('Augmented')) {
+          update.accessoryUpgrade = 'Need';
+        }
+      })
+    )
+    .catch((err) => {
+      console.log(err);
+    });
 
   prisma.character
     .update({
-      where: { id: id },
-      data: update as any,
+      where: { id },
+      data: update,
     })
     .then(() => {
       res.status(200).json({ name, jobAbbrev, patch });
